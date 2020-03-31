@@ -126,7 +126,7 @@ class App extends React.Component {
   sortHandler(value) {
     let sortQuery;
     if (value === '') {
-      console.log('nothing');
+      // console.log('nothing');
     } else if (value === 'Highest Rated') {
 
       sortQuery = 'sort_by=rating_desc';

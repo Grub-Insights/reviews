@@ -39,12 +39,12 @@ function getNewUserId() {
 
 const configureDB = () => {
   Promise.promisifyAll(db.connection);
-  return db.connection.queryAsync('DROP DATABASE sixthSquawk;')
+  return db.connection.queryAsync('DROP DATABASE Squawk;')
     .then(() => {
-      db.connection.queryAsync('CREATE DATABASE sixthSquawk');
+      db.connection.queryAsync('CREATE DATABASE Squawk');
     })
     .then(() => {
-      db.connection.queryAsync('USE sixthSquawk;');
+      db.connection.queryAsync('USE Squawk;');
     })
     .then(() => {
       // restaurants

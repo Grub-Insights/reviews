@@ -62,6 +62,6 @@ CREATE TABLE `reviews` (
     PRIMARY KEY(`review_id`)
 );
 
-DROP TABLE IF EXISTS reviewPhotos;
+-- DROP TABLE IF EXISTS reviewPhotos;
 
-CREATE TABLE `reviewPhotos`
+-- CREATE TABLE `reviewPhotos`

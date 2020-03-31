@@ -60,14 +60,5 @@
     "webpack-cli": "^3.3.11"
   },
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Denali-Outdoors/reviews-server.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/Denali-Outdoors/reviews-server/issues"
-  },
-  "homepage": "https://github.com/Denali-Outdoors/reviews-server#readme"
+  "main": "index.js"
 }
