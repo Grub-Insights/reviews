@@ -131,14 +131,32 @@ function updateReviewVote(reviewInfo, callback) {
   });
 }
 
+function postRestaurant(req, res) {
+  connection.query(`INSERT INTO restaurants (name) VALUES ("${req.query.name}")`, (error, results) => {
+    if (error) throw error;
+    else res.send(results);
+  });
+}
 
-// module.exports {
-// getReviews = getReviewsByRestId,
-// updateVote = updateVoteByReviewId
-// }
+function updateRestaurant(req, res) {
+  connection.query(`UPDATE restaurants SET name="${req.query.name}" WHERE name="${req.query.oldName}"`, (error, results) => {
+    if (error) throw error;
+    else res.send(results);
+  });
+}
+
+function deleteRestaurant(req, res) {
+  connection.query(`DELETE FROM restaurants WHERE name="${req.query.name}"`, (error, results) => {
+    if (error) throw error;
+    else res.send(results);
+  });
+}
 
 module.exports.connection = connection;
 module.exports.getReviews = getReviews;
 module.exports.updateReviewVote = updateReviewVote;
 module.exports.getTotalReviews = getTotalReviews;
 module.exports.getQueryTotal = getQueryTotal;
+module.exports.postRestaurant = postRestaurant;
+module.exports.updateRestaurant = updateRestaurant;
+module.exports.deleteRestaurant = deleteRestaurant;

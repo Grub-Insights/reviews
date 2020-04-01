@@ -119,7 +119,7 @@ const configureDB = () => {
     })
     .then(() => {
       // populate reviews
-      // generate random number of reviews for each restaurant  
+      // generate random number of reviews for each restaurant
       for (let restaurantId = 1; restaurantId < 101; restaurantId++) {
         // create user collection to prevent repeats
         const usersCheckedIn = [];

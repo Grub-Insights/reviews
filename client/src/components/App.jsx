@@ -95,7 +95,6 @@ class App extends React.Component {
   }
 
   searchReviews(value) {
-    
     $.get(`http://localhost:5001/restaurants/100?${this.state.sort}&q=${value}`, (results) => {
 
       this.setState({
@@ -192,13 +191,12 @@ class App extends React.Component {
     });
     let voteType = `${vote}_vote`;
     let voteCount = `${vote}_count`;
-
-    // console.log(reviewInfo.voteType)
     $.ajax(`http://localhost:5001/review/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`, {
       type: 'PATCH',
       data: reviewInfo,
       success: (result) => {
-        console.log(result, 'look here')
+        console.log(`http://localhost:5001/review/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`);
+        console.log(result, 'look here');
       },
     });
     let reviewCopy = reviewInfo;

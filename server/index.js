@@ -6,20 +6,12 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const db = require('./db');
-// console.log(db.getReviews)
+
 const port = 5001;
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../client/public/')));
-// app.use(bodyParser);
-
-
-app.get('/', (req, res) => {
-  console.log('hit')
-  res.send('HELLO FROM SQUAWK!!!');
-});
 
 app.get('/restaurants/:restaurantId', (req, res) => {
-  console.log(req.query, 'heeeey')
   const restaurant = req.params.restaurantId;
   const start = parseInt(req.query.start);
   const sort = req.query.sort_by;
@@ -32,6 +24,7 @@ app.get('/restaurants/:restaurantId', (req, res) => {
     }
   });
 });
+
 app.get('/reviews/:restaurantId', (req, res) => {
   let query;
   if (req.query.q) {
@@ -72,6 +65,20 @@ app.patch('/review/:reviewId', (req, res) => {
       res.send(results);
     }
   });
+});
+
+const jsonParser = bodyParser.json();
+
+app.post('/restaurants/name', jsonParser, (req, res) => {
+  db.postRestaurant(req, res);
+});
+
+app.put('/restaurants/name', jsonParser, (req, res) => {
+  db.updateRestaurant(req, res);
+});
+
+app.delete('/restaurants/name', jsonParser, (req, res) => {
+  db.deleteRestaurant(req, res);
 });
 
 app.listen(port, () => console.log(`SQUAWK listening on port ${port}!`));
