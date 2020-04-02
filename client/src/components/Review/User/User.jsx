@@ -14,7 +14,7 @@ const User = ({ isHovered, review }) => {
     <div>
       <span style={divStyle}>
         <span className="profilePicContainer">
-          <img className="profilePic" src={review.profile_pic} alt="nothing" />
+          <img width="120px" height="120px" className="profilePic" src={review.profile_pic} alt="nothing" />
         </span>
         <span className="userInfo">
           <div className="userName" id="userName">
@@ -44,7 +44,7 @@ const User = ({ isHovered, review }) => {
       </span>
     </div>
 
-  )
+  );
 };
 
 export default User;
