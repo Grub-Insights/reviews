@@ -41,6 +41,7 @@ db.once('open', () => {
 const restaurantSchema = new mongoose.Schema({
   _id: { type: Number, unique: true },
   name: String,
+  reviews: [],
 });
 
 const userSchema = new mongoose.Schema({
@@ -57,7 +58,7 @@ const reviewSchema = new mongoose.Schema({
   _review_id: { type: Number, unique: true },
   id_User: Number,
   id_Restaurants: Number,
-  date: Number,
+  date: Date,
   rating: Number,
   body: String,
   useful_count: Number,
@@ -73,32 +74,7 @@ const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 const User = mongoose.model('User', userSchema);
 const Review = mongoose.model('Review', reviewSchema);
 
-function randomDate() {
-  const year = Math.floor(Math.random() * 5) + 2015;
-
-  const month = Math.floor(Math.random() * 10) + 2;
-  const monthString = (`0 ${month}`);
-  const day = Math.floor(Math.random() * 28) + 1;
-
-  const dateString = (year + monthString + day);
-
-  // eslint-disable-next-line radix
-  const finalDate = parseInt(dateString);
-  return finalDate;
-}
-
-function getNewUserId() {
-  return Math.floor(Math.random() * 2000) + 1;
-}
-
-for (let i = 1; i < 101; i += 1) {
-  const oneRestaurant = new Restaurant({ _id: i, name: fake.company.companyName()});
-  oneRestaurant.save((err, restaurant) => {
-    if (err) { return console.log(err); }
-    console.log('added: ', restaurant.name);
-  });
-}
-
+// i <= 25000
 for (let i = 1; i <= 2000; i++) {
   const oneUser = new User({
     _user_id: i,
@@ -114,50 +90,38 @@ for (let i = 1; i <= 2000; i++) {
     console.log('added: ', user.name);
   });
 }
+// i < 25000
+for (let i = 1; i < 101; i += 1) {
 
-// populate reviews
-// generate random number of reviews for each restaurant
-for (let restaurantId = 1; restaurantId < 101; restaurantId++) {
-  // create user collection to prevent repeats
-  const usersCheckedIn = [];
-  const numOfReviews = 100;// getNumOfReviews()
-  for (let i = 0; i < numOfReviews; i++) {
-    // generate a fake userId between 1 & 2000
-    const currentUser = getNewUserId();
-    // if the user has not reviewed the current restaurant
-    if (!usersCheckedIn.includes(currentUser)) {
-      // add the user to list of users that have checked in
-      usersCheckedIn.push(currentUser);
-      // FAKE DATE
-      const fakeDate = randomDate();
-      // generate a fake rating (integer 1 - 5)
-      const rating = fake.random.number({'min': 1, 'max': 5});
-      // generate a fake body of text
-      const reviewBody = fake.lorem.sentences(20);
-      // generate a fake "useful" count (0 - 4)
-      const usefulCount = fake.random.number({'min': 1, 'max': 9});
-      // generate a fake "funny" count (0 - 4)
-      const funnyCount = fake.random.number({'min': 1, 'max': 6});
-      // generate a fake "cool" count (0 - 4)
-      const coolCount = fake.random.number({'min': 1, 'max': 3});
-      const checkin = fake.random.number({'min': 0, 'max': 3});
-      // EACH iteration: query db, insert into reviews
-      const oneReview = new Review({
-        _review_id: ((restaurantId - 1) * 100) + i + 1,
-        id_User: currentUser,
-        id_Restaurants: restaurantId,
-        date: randomDate(),
-        rating: fake.random.number({'min': 1, 'max': 5}),
-        body: fake.lorem.sentences(20),
-        useful_count: fake.random.number({'min': 1, 'max': 9}),
-        cool_count: fake.random.number({'min': 1, 'max': 6}),
-        funny_count: fake.random.number({'min': 1, 'max': 3}),
-        check_ins: fake.random.number({'min': 0, 'max': 3}),
-      });
-      oneReview.save((err, review) => {
-        if (err) { console.log(err); }
-        console.log('added: ', review._review_id);
-      });
-    }
+  const reviewsArray = [];
+  // i % 7 !== 0 ? Math.floor(Math.random() * Math.floor(1000)) : 1000
+  for (let j = 1; j < 101; j++) {
+    reviewsArray.push(((i - 1) * 100) + j);
+    const oneReview = new Review({
+      _review_id: ((i - 1) * 100) + j,
+      id_User: fake.random.number({'min': 1, 'max': 2000}),
+      id_Restaurants: i,
+      date: fake.date.between('2000-01-10', '2020-01-21').slice(0, 10),
+      rating: fake.random.number({'min': 1, 'max': 5}),
+      body: fake.lorem.sentences(20),
+      useful_count: fake.random.number({'min': 1, 'max': 9}),
+      cool_count: fake.random.number({'min': 1, 'max': 6}),
+      funny_count: fake.random.number({'min': 1, 'max': 3}),
+      check_ins: fake.random.number({'min': 0, 'max': 3}),
+    });
+    oneReview.save((err, review) => {
+      if (err) { console.log(err); }
+      console.log('added: ', review.date);
+    });
   }
+
+  const oneRestaurant = new Restaurant({
+    _id: i,
+    name: fake.company.companyName(),
+    reviews: reviewsArray,
+  });
+  oneRestaurant.save((err, restaurant) => {
+    if (err) { return console.log(err); }
+    console.log('added: ', restaurant.name);
+  });
 }
