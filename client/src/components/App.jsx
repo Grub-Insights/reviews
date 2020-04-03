@@ -32,7 +32,7 @@ class App extends React.Component {
 
   getReviews() {
     // let start = (this.state.currentPage * 20) - 20
-    $.get(`http://localhost:5001/restaurants/100?${this.state.sort}`, (results) => {
+    $.get(`http://localhost:5001/restaurants/100/reviews?${this.state.sort}`, (results) => {
       this.setState({
         data: results,
       });
@@ -40,7 +40,7 @@ class App extends React.Component {
   }
 
   getTotalReviews() {
-    $.get('http://localhost:5001/reviews/100', (results) => {
+    $.get('http://localhost:5001/restaurants/100/numberofreviews', (results) => {
       const total = Number(results);
       this.setState({
         totalReviews: total,
@@ -57,7 +57,7 @@ class App extends React.Component {
       currentPage: nextPage,
     });
     const start = nextPage * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100?start=${start}&${this.state.sort}`, (results) => {
+    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
       this.setState({
         data: results,
       });
@@ -72,7 +72,7 @@ class App extends React.Component {
       currentPage: previousPage,
     });
     const start = previousPage * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100?start=${start}&${this.state.sort}`, (results) => {
+    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
       this.setState({
         data: results,
       });
@@ -86,7 +86,7 @@ class App extends React.Component {
       // start: value * 20 - 20,
     });
     const start = value * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100?start=${start}&${this.state.sort}`, (results) => {
+    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
       this.setState({
         data: results,
       });
@@ -95,13 +95,12 @@ class App extends React.Component {
   }
 
   searchReviews(value) {
-    $.get(`http://localhost:5001/restaurants/100?${this.state.sort}&q=${value}`, (results) => {
-
+    $.get(`http://localhost:5001/restaurants/100/reviews?${this.state.sort}&q=${value}`, (results) => {
       this.setState({
         data: results,
       });
     });
-    $.get(`http://localhost:5001/reviews/100?q=${value}`, (results) => {
+    $.get(`http://localhost:5001/restaurants/100/numberofreviews?q=${value}`, (results) => {
       let total = Number(results);
       if (isNaN(total)) {
         total = Number(results[0]);
@@ -129,7 +128,7 @@ class App extends React.Component {
     } else if (value === 'Highest Rated') {
 
       sortQuery = 'sort_by=rating_desc';
-      $.get(`http://localhost:5001/restaurants/100?${sortQuery}`, (results) => {
+      $.get(`http://localhost:5001/restaurants/100/reviews?${sortQuery}`, (results) => {
         this.setState({
           data: results,
           sort: sortQuery,
@@ -139,7 +138,7 @@ class App extends React.Component {
       });
     } else if (value === 'Lowest Rated') {
       sortQuery = 'sort_by=rating_asc';
-      $.get(`http://localhost:5001/restaurants/100?${sortQuery}`, (results) => {
+      $.get(`http://localhost:5001/restaurants/100reviews?${sortQuery}`, (results) => {
         this.setState({
           data: results,
           sort: sortQuery,
@@ -149,7 +148,7 @@ class App extends React.Component {
       });
     } else if (value === 'Newest First') {
       sortQuery = 'sort_by=date_desc';
-      $.get(`http://localhost:5001/restaurants/100?${sortQuery}`, (results) => {
+      $.get(`http://localhost:5001/restaurants/100reviews?${sortQuery}`, (results) => {
         this.setState({
           data: results,
           sort: sortQuery,
@@ -162,7 +161,7 @@ class App extends React.Component {
       });
     } else if (value === 'Oldest First') {
       sortQuery = 'sort_by=date_asc';
-      $.get(`http://localhost:5001/restaurants/100?${sortQuery}`, (results) => {
+      $.get(`http://localhost:5001/restaurants/100/reviews?${sortQuery}`, (results) => {
         this.setState({
           data: results,
           sort: sortQuery,
@@ -191,11 +190,11 @@ class App extends React.Component {
     });
     let voteType = `${vote}_vote`;
     let voteCount = `${vote}_count`;
-    $.ajax(`http://localhost:5001/review/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`, {
+    $.ajax(`http://localhost:5001/reviews/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`, {
       type: 'PATCH',
       data: reviewInfo,
       success: (result) => {
-        console.log(`http://localhost:5001/review/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`);
+        console.log(`http://localhost:5001/reviews/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`);
         console.log(result, 'look here');
       },
     });

@@ -11,7 +11,7 @@ const port = 5001;
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../client/public/')));
 
-app.get('/restaurants/:restaurantId', (req, res) => {
+app.get('/restaurants/:restaurantId/reviews', (req, res) => {
   const restaurant = req.params.restaurantId;
   const start = parseInt(req.query.start);
   const sort = req.query.sort_by;
@@ -25,7 +25,7 @@ app.get('/restaurants/:restaurantId', (req, res) => {
   });
 });
 
-app.get('/reviews/:restaurantId', (req, res) => {
+app.get('/restaurants/:restaurantId/numberofreviews', (req, res) => {
   let query;
   if (req.query.q) {
     query = req.query.q;
@@ -33,7 +33,7 @@ app.get('/reviews/:restaurantId', (req, res) => {
       if (err) {
         res.sendStatus(err);
       } else {
-        const count = (JSON.stringify(results).slice(14, 16));
+        const count = (JSON.stringify(results).slice(14, 17));
         res.send(count);
       }
     });
@@ -42,14 +42,14 @@ app.get('/reviews/:restaurantId', (req, res) => {
       if (err) {
         res.sendStatus(err);
       } else {
-        const count = (JSON.stringify(results).slice(14, 16));
+        const count = (JSON.stringify(results).slice(14, 17));
         res.send(count);
       }
     });
   }
 });
 
-app.patch('/review/:reviewId', (req, res) => {
+app.patch('/reviews/:reviewId', (req, res) => {
 // http://localhost:5000/reviewId/9676?value=cool_count&voted=true
   const voteInfo = {
     id: Number(req.params.reviewId),
@@ -69,15 +69,15 @@ app.patch('/review/:reviewId', (req, res) => {
 
 const jsonParser = bodyParser.json();
 
-app.post('/restaurants/name', jsonParser, (req, res) => {
+app.post('/restaurants/:name', jsonParser, (req, res) => {
   db.postRestaurant(req, res);
 });
 
-app.put('/restaurants/name', jsonParser, (req, res) => {
+app.put('/restaurants/:restaurantId', jsonParser, (req, res) => {
   db.updateRestaurant(req, res);
 });
 
-app.delete('/restaurants/name', jsonParser, (req, res) => {
+app.delete('/restaurants/:restaurantId', jsonParser, (req, res) => {
   db.deleteRestaurant(req, res);
 });
 

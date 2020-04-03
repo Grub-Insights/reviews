@@ -37,7 +37,7 @@ function getReviews(businessId, start = null, sort = null, search = null, callba
     searchQuery = '';
   }
   let startQuery;
-  if (!isNaN(start)) {
+  if (typeof start !== 'number') {
     startQuery = `LIMIT ${start}, 20`;
   } else {
     startQuery = 'LIMIT 20';
@@ -108,21 +108,22 @@ function updateReviewVote(reviewInfo, callback) {
 }
 
 function postRestaurant(req, res) {
-  connection.query(`INSERT INTO restaurants (name) VALUES ("${req.query.name}")`, (error, results) => {
+  connection.query(`INSERT INTO restaurants (name) VALUES ("${req.params.name}")`, (error, results) => {
     if (error) throw error;
     else res.send(results);
   });
 }
 
 function updateRestaurant(req, res) {
-  connection.query(`UPDATE restaurants SET name="${req.query.name}" WHERE name="${req.query.oldName}"`, (error, results) => {
+  // res.send(req.query.restaurantId, req.query.name);
+  connection.query(`UPDATE restaurants SET name="${req.query.name}" WHERE id="${req.params.restaurantId}"`, (error, results) => {
     if (error) throw error;
     else res.send(results);
   });
 }
 
 function deleteRestaurant(req, res) {
-  connection.query(`DELETE FROM restaurants WHERE name="${req.query.name}"`, (error, results) => {
+  connection.query(`DELETE FROM restaurants WHERE id="${req.params.restaurantId}"`, (error, results) => {
     if (error) throw error;
     else res.send(results);
   });
