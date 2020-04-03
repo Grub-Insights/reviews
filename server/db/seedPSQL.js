@@ -3,8 +3,6 @@
 /* eslint-disable quote-props */
 /* eslint-disable object-curly-spacing */
 /* eslint-disable no-plusplus */
-// import faker
-
 const fake = require('faker');
 const Promise = require('bluebird');
 const { Client } = require('pg');
@@ -73,7 +71,6 @@ Promise.promisifyAll(client.connect())
   })
   .then(() => {
     // populate users
-    console.log('made it ');
     for (let i = 1; i <= 2000; i++) {
       let username = `${fake.name.firstName()  } ${   fake.name.lastName()[0]  }.`;
       const pic = profileImg[i % 19];
