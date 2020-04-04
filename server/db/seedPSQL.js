@@ -36,19 +36,19 @@ const profileImg = [
 ];
 
 
-function randomDate() {
-  const year = Math.floor(Math.random() * 5) + 2015;
+// function randomDate() {
+//   const year = Math.floor(Math.random() * 5) + 2015;
 
-  const month = Math.floor(Math.random() * 10) + 2;
-  const monthString = (`0${  month}`);
-  const day = Math.floor(Math.random() * 28) + 1;
+//   const month = Math.floor(Math.random() * 10) + 2;
+//   const monthString = (`0${  month}`);
+//   const day = Math.floor(Math.random() * 28) + 1;
 
-  const dateString = (year + monthString + day);
+//   const dateString = (year + monthString + day);
 
-  // eslint-disable-next-line radix
-  const finalDate = parseInt(dateString);
-  return finalDate;
-}
+//   // eslint-disable-next-line radix
+//   const finalDate = parseInt(dateString);
+//   return finalDate;
+// }
 
 function getNewUserId() {
   return Math.floor(Math.random() * 2000) + 1;
@@ -103,7 +103,7 @@ Promise.promisifyAll(client.connect())
           // add the user to list of users that have checked in
           usersCheckedIn.push(currentUser);
           // FAKE DATE
-          const fakeDate = randomDate();
+          const fakeDate = fake.date.between('2000-01-10', '2020-01-21');
           // generate a fake rating (integer 1 - 5)
           const rating = fake.random.number({'min': 1, 'max': 5});
           // generate a fake body of text
