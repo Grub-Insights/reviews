@@ -2,6 +2,7 @@ const fake = require('faker');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const { profileImg } = require('../profileImages');
 
+// edit headers depending on whether you're importing to mongo vs postgres
 const generateUserData = () => {
   const csvWriter = createCsvWriter({
     path: 'server/db/seededResults/userData.csv',
