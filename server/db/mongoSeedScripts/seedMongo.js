@@ -1,30 +1,31 @@
 const fake = require('faker');
 const fs = require('fs');
+const { profileImg } = require('../profileImages');
+
 
 const writeRestaurantsAndReviews = fs.createWriteStream('server/db/seededResults/rANDrData.json');
 function writeTenMillionRandR(writer, encoding, callback) {
-  let i = 100000;
+  let i = 1000000;
   let idRev = 0;
   let idRest = 0;
   function write() {
     let ok = true;
     do {
       const reviewsArray = [];
-      const numOfRevs = Math.floor(Math.random() * 300);
+      const numOfRevs = i % 1000 !== 0 ? Math.floor(Math.random() * 26) : 150;
       for (let j = 0; j < numOfRevs; j += 1) {
         // one review
         idRev += 1;
         const id_user = Math.floor(Math.random() * 99999 + 1);
         const date = fake.date.between('2000-01-10', '2020-01-21');
         const rating = Math.floor(Math.random() * 4 + 1);
-        const body = fake.lorem.sentences(i % 500 !== 0 ? Math.floor(Math.random() * 2 + 4) : 15).replace(/,/g, '.');
+        const body = fake.lorem.sentences(i % 1000 !== 0 ? Math.floor(Math.random() * 2 + 4) : 15).replace(/,/g, '.');
         const useful_count = Math.floor(Math.random() * 8 + 1);
         const cool_count = Math.floor(Math.random() * 5 + 1);
         const funny_count = Math.floor(Math.random() * 2 + 1);
         const check_ins = Math.floor(Math.random() * 3);
         reviewsArray.push({
           _review_id: idRev,
-          id_user,
           date,
           rating,
           body,
@@ -35,6 +36,15 @@ function writeTenMillionRandR(writer, encoding, callback) {
           useful_vote: 0,
           cool_vote: 0,
           funny_vote: 0,
+          user: {
+          _user_id: id_user,
+          name:  `${fake.name.firstName()} ${fake.name.lastName()[0]}`,
+          profile_pic: profileImg[idRev % 19],
+          reviews: Math.floor(Math.random() * 950 + 50),
+          friends: Math.floor(Math.random() * 950 + 50),
+          photos: Math.floor(Math.random() * 950 + 50),
+          location: `${fake.address.city()}, ${fake.address.stateAbbr()}`,
+        }
         });
       }
       i -= 1;
@@ -54,7 +64,7 @@ function writeTenMillionRandR(writer, encoding, callback) {
     } while (i > 0 && ok);
     if (i > 0) {
     // had to stop early! write some more once it drains
-      console.log(`...on ${(100000 - i) / 100000}`);
+      console.log(`...on ${(1000000 - i) / 1000000}`);
       writer.once('drain', write);
     }
   }
@@ -63,5 +73,5 @@ function writeTenMillionRandR(writer, encoding, callback) {
 
 writeTenMillionRandR(writeRestaurantsAndReviews, 'utf-8', () => {
   writeRestaurantsAndReviews.end();
-  console.log('...done');
+  console.log('...Done');
 });
