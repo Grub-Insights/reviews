@@ -58,12 +58,13 @@ function getNewUserId() {
 
 const configureDB = () => {
   Promise.promisifyAll(db.connection);
-  return db.connection.queryAsync('DROP DATABASE Squawk;')
+  // return db.connection.queryAsync('DROP DATABASE IF EXISTS squawk;')
+  return db.connection.queryAsync('CREATE DATABASE IF NOT EXISTS squawk;')
     .then(() => {
-      db.connection.queryAsync('CREATE DATABASE Squawk');
+      db.connection.queryAsync('CREATE DATABASE IF NOT EXISTS squawk;');
     })
     .then(() => {
-      db.connection.queryAsync('USE Squawk;');
+      db.connection.queryAsync('USE squawk;');
     })
     .then(() => {
       // restaurants
