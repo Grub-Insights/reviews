@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const db = require('./db');
+const mongo = require('./db/mongoSeedScripts/readMongo');
 
 const port = 5001;
 app.use(cors());
@@ -16,37 +17,31 @@ app.get('/restaurants/:restaurantId/reviews', (req, res) => {
   const start = parseInt(req.query.start);
   const sort = req.query.sort_by;
   const search = req.query.q;
-  db.getReviews(restaurant, start, sort, search, (err, results) => {
-    if (err) {
-      res.sendStatus(err);
-    } else {
-      res.send(results);
-    }
-  });
+  mongo.getReviews(req, res, restaurant, sort);
 });
 
 app.get('/restaurants/:restaurantId/numberofreviews', (req, res) => {
-  let query;
-  if (req.query.q) {
-    query = req.query.q;
-    db.getQueryTotal(req.params.restaurantId, query, (err, results) => {
-      if (err) {
-        res.sendStatus(err);
-      } else {
-        const count = (JSON.stringify(results).slice(14, 17));
-        res.send(count);
-      }
-    });
-  } else {
-    db.getTotalReviews(req.params.restaurantId, (err, results) => {
-      if (err) {
-        res.sendStatus(err);
-      } else {
-        const count = (JSON.stringify(results).slice(14, 17));
-        res.send(count);
-      }
-    });
-  }
+  // let query;
+  // if (req.query.q) {
+  //   query = req.query.q;
+  //   db.getQueryTotal(req.params.restaurantId, query, (err, results) => {
+  //     if (err) {
+  //       res.sendStatus(err);
+  //     } else {
+  //       const count = (JSON.stringify(results).slice(14, 17));
+  //       res.send(count);
+  //     }
+  //   });
+  // } else {
+  //   db.getTotalReviews(req.params.restaurantId, (err, results) => {
+  //     if (err) {
+  //       res.sendStatus(err);
+  //     } else {
+  //       const count = (JSON.stringify(results).slice(14, 17));
+  //       res.send(count);
+  //     }
+  //   });
+  // }
 });
 
 app.patch('/reviews/:reviewId', (req, res) => {

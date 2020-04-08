@@ -26,7 +26,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getTotalReviews();
     this.getReviews();
   }
 
@@ -35,17 +34,9 @@ class App extends React.Component {
     $.get(`http://localhost:5001/restaurants/100/reviews?${this.state.sort}`, (results) => {
       this.setState({
         data: results,
-      });
-    });
-  }
-
-  getTotalReviews() {
-    $.get('http://localhost:5001/restaurants/100/numberofreviews', (results) => {
-      const total = Number(results);
-      this.setState({
-        totalReviews: total,
-        initialReviews: total,
-      });
+        totalReviews: results.length,
+        initialReviews: results.length,
+      }, () => console.log(this.state.data));
     });
   }
 
@@ -122,53 +113,23 @@ class App extends React.Component {
   }
 
   sortHandler(value) {
-    let sortQuery;
-    if (value === '') {
-      // console.log('nothing');
-    } else if (value === 'Highest Rated') {
-
-      sortQuery = 'sort_by=rating_desc';
-      $.get(`http://localhost:5001/restaurants/100/reviews?${sortQuery}`, (results) => {
-        this.setState({
-          data: results,
-          sort: sortQuery,
-          totalReviews: this.state.initialReviews,
-          currentPage: 1,
-        });
-      });
+    const { data } = this.state
+    if (value === 'Highest Rated') {
+      const sorted = [...data].sort((a, b) => b.rating - a.rating);
+      this.setState({ data: sorted });
     } else if (value === 'Lowest Rated') {
-      sortQuery = 'sort_by=rating_asc';
-      $.get(`http://localhost:5001/restaurants/100reviews?${sortQuery}`, (results) => {
-        this.setState({
-          data: results,
-          sort: sortQuery,
-          totalReviews: this.state.initialReviews,
-          currentPage: 1,
-        });
-      });
+      const sorted = [...data].sort((a, b) => a.rating - b.rating);
+      this.setState({ data: sorted });
     } else if (value === 'Newest First') {
-      sortQuery = 'sort_by=date_desc';
-      $.get(`http://localhost:5001/restaurants/100reviews?${sortQuery}`, (results) => {
-        this.setState({
-          data: results,
-          sort: sortQuery,
-          totalReviews: this.state.initialReviews,
-          currentPage: 1,
-        });
+      const sorted = [...data].sort((a, b) => {
+        return Number(`${b.date.slice(0, 4)}${b.date.slice(5, 7)}${b.date.slice(8, 10)}`) - Number(`${a.date.slice(0, 4)}${a.date.slice(5, 7)}${a.date.slice(8, 10)}`);
       });
-      this.setState({
-        totalReviews: this.state.initialReviews,
-      });
+      this.setState({ data: sorted });
     } else if (value === 'Oldest First') {
-      sortQuery = 'sort_by=date_asc';
-      $.get(`http://localhost:5001/restaurants/100/reviews?${sortQuery}`, (results) => {
-        this.setState({
-          data: results,
-          sort: sortQuery,
-          totalReviews: this.state.initialReviews,
-          currentPage: 1,
-        });
+      const sorted = [...data].sort((a, b) => {
+        return Number(`${a.date.slice(0, 4)}${a.date.slice(5, 7)}${a.date.slice(8, 10)}`) - Number(`${b.date.slice(0, 4)}${b.date.slice(5, 7)}${b.date.slice(8, 10)}`);
       });
+      this.setState({ data: sorted });
     }
   }
 

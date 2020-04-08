@@ -59,39 +59,18 @@ class Review extends React.Component {
   }
 
   render() {
-    let date = `${this.props.review.date} `;
-    date = date.split('');
-    const year = date[0] + date[1] + date[2] + date[3];
-    let month;
-    let day;
-    if (date[4] === '0') {
-      month = date[5];
-    } else {
-      month = date[4] + date[5];
-    } if (date[6] === '0') {
-      day = date[7]
-    } else {
-      day = date[6] + date[7];
-    }
-    const formattedDate = [month, day, year].join('/');
     let currentVoteStatus = this.state;
     let hoverStatus = this.state.isHovered
     return (
-      
-      <div className="reviewEntry" onMouseLeave={this.mouseOutHandler}onMouseOver={this.mouseOverHandler}>
-        
-        <User isHovered={this.state.isHovered} review={this.props.review} />
-        
+      <div className="reviewEntry" onMouseLeave={this.mouseOutHandler} onMouseOver={this.mouseOverHandler}>
+        <User isHovered={this.state.isHovered} user={this.props.review.user} />
         <span style={spanStyle}>
           <RatingBar rating={this.props.review.rating} />
-          <span className="date">{formattedDate}</span>
+          <span className="date">{`${this.props.review.date.slice(0, 10).replace(/-/g, '/')}`}</span>
           <CheckIn  review={this.props.review} />
-          <p className="reviewBody">
-            {this.props.review.body}
-          </p>
+          <p className="reviewBody">{this.props.review.body}</p>
           <VoteButtons status={currentVoteStatus} updateVote={this.voteClick} review={this.props.review} />
         </span>
-
       </div>
     );
   }

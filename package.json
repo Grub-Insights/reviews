@@ -10,11 +10,11 @@
     "server-dev": "nodemon server/index.js",
     "react-dev": "webpack -w",
     "test": "jest --verbose --coverage",
-    "seed": "node ./server/db/seeds",
+    "old-seed": "node ./server/db/seeds",
     "seed-mongo": "node ./server/db/mongoSeedScripts/seedMongo",
     "read-mongo": "node ./server/db/mongoSeedScripts/readMongo",
     "seed-users": "node ./server/db/mongoSeedScripts/userGeneration",
-    "seed-pg": "node ./server/db/postgresSeedScripts/restaurantSeeder && node ./server/db/postgresSeedScripts/reviewSeeder "
+    "seed-pg": "node ./server/db/postgresSeedScripts/restaurantSeeder && node ./server/db/postgresSeedScripts/reviewSeeder"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
