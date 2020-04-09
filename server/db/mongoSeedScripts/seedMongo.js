@@ -51,7 +51,7 @@ function writeTenMillionRandR(writer, encoding, callback) {
       idRest += 1;
       // one restaurant
       const data = JSON.stringify({
-        _id: idRest,
+        _restaurant_id: idRest,
         name: fake.company.companyName(),
         reviews: reviewsArray,
       });

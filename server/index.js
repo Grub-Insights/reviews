@@ -12,11 +12,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../client/public/')));
 
 app.get('/restaurants/:restaurantId/reviews', (req, res) => {
-  const restaurant = req.params.restaurantId;
-  const start = parseInt(req.query.start);
-  const sort = req.query.sort_by;
-  const search = req.query.q;
-  mongo.getReviews(res, restaurant);
+  mongo.getReviews(res, req.params.restaurantId);
 });
 
 app.patch('/restaurants/:restaurantId/reviews/:reviewId', (req, res) => {
@@ -28,13 +24,6 @@ app.patch('/restaurants/:restaurantId/reviews/:reviewId', (req, res) => {
     voted: Number(req.query.voted),
   };
   mongo.updateVoteCount(res, voteInfo);
-  // db.updateReviewVote(voteInfo, (err, results) => {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     res.send(results);
-  //   }
-  // });
 });
 
 const jsonParser = bodyParser.json();

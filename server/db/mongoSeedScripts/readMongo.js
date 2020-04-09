@@ -3,7 +3,7 @@ const fake = require('faker');
 
 const restaurantSchema = new mongoose.Schema({
   // restaurant_id: { type: Number, unique: true },
-  _id: { type: Number, unique: true },
+  _restaurant_id: { type: Number, unique: true },
   name: String,
   reviews: [{
     _review_id: { type: Number, unique: true },
@@ -41,15 +41,14 @@ db.once('open', () => { console.log('connected'); })
   });
 
 getReviews = (res, restaurant) => {
-  let reviews = [];
-  Restaurant.find({_id: restaurant}, (err, restaurants) => {
+  Restaurant.find({_restaurant_id: restaurant}, (err, restaurants) => {
     if (err) { res.sendStatus(400); return console.error(err); } 
-    else { reviews = restaurants[0].reviews; res.send(reviews); }
+    else { res.send(restaurants[0].reviews); }
   });
 }
 
 updateVoteCount = (res, voteInfo) => {
-  Restaurant.find({_id: voteInfo.restaurant_id}, (err, restaurants) => {
+  Restaurant.find({_restaurant_id: voteInfo.restaurant_id}, (err, restaurants) => {
     if (err) { res.sendStatus(400); return console.error(err); }
     else {
       const UpdatedRestaurant = restaurants[0];
@@ -60,23 +59,13 @@ updateVoteCount = (res, voteInfo) => {
         }
       });
       const newRestaurant = new Restaurant(UpdatedRestaurant);
-      Restaurant.updateOne({_id: voteInfo.restaurant_id}, UpdatedRestaurant, function(err, result, n){
+      Restaurant.updateOne({_restaurant_id: voteInfo.restaurant_id}, UpdatedRestaurant, function(err, result, n){
         if (err) { res.sendStatus(400); return console.error(err); }
         else { console.log(result); res.send(result); }
-    });
-        // .then((err, results) => {
-        //   console.log(results);
-        // });
+      });
     }
   });
 }
-
-// if (reviewInfo.voted === 0) {
-//   queryString = `UPDATE reviews SET ${reviewInfo.voteStatus} = ${reviewInfo.voteStatus} + 1, ${reviewInfo.voteType} = 1 WHERE review_id=${reviewInfo.id}`;
-// } else {
-//   console.log('voted');
-//   queryString = `UPDATE reviews SET ${reviewInfo.voteStatus} = ${reviewInfo.voteStatus} - 1, ${reviewInfo.voteType} = 0 WHERE review_id=${reviewInfo.id}`;
-// }
 
 module.exports = {
   db,

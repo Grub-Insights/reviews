@@ -37,7 +37,7 @@ class App extends React.Component {
         totalReviews: results.length,
         initialReviews: results.length,
         currentRestaurant: restaurant,
-      }, () => { if (cb) { cb(); } console.log(this.state.currentRestaurant); });
+      }, () => { if (cb) { cb(); } });
     });
   }
 
@@ -67,7 +67,7 @@ class App extends React.Component {
   }
 
   searchReviews(value) {
-    this.getReviews(1, () => {
+    this.getReviews(this.state.currentRestaurant, () => {
       const { data } = this.state
       const searched = [];
       data.forEach((review) => {
@@ -89,7 +89,7 @@ class App extends React.Component {
       currentPage: 1,
       totalReviews: this.state.initialReviews,
     }, () => { 
-      this.getReviews(1, () => {
+      this.getReviews(this.state.currentRestaurant, () => {
         this.sortHandler('Newest First');
       });
     });
@@ -118,7 +118,6 @@ class App extends React.Component {
   }
 
   updateVote(vote, reviewInfo) {
-    console.log(reviewInfo);
     reviewInfo.restaurantID = this.state.currentRestaurant;
     let voteNum;
     if (vote === 'useful') { voteNum = reviewInfo.useful_vote; }
@@ -133,11 +132,11 @@ class App extends React.Component {
     });
     let voteType = `${vote}_vote`;
     let voteCount = `${vote}_count`;
-    $.ajax(`http://localhost:5001/restaurants/1/reviews/${reviewInfo._review_id}?value=${voteType}&voted=${voteNum}`, {
+    $.ajax(`http://localhost:5001/restaurants/${this.state.currentRestaurant}/reviews/${reviewInfo._review_id}?value=${voteType}&voted=${voteNum}`, {
       type: 'PATCH',
       data: reviewInfo,
       success: (result) => {
-        console.log(result, 'look here');
+        console.log(result);
       },
     });
     let reviewCopy = reviewInfo;
@@ -170,5 +169,4 @@ class App extends React.Component {
   }
 }
 
-// window.Reviews = App;
 export default App;
