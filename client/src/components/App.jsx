@@ -25,18 +25,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getReviews(() => {
+    this.getReviews(1, () => {
       this.sortHandler('Newest First');
     });
   }
 
-  getReviews(cb) {
-    $.get(`http://localhost:5001/restaurants/100/reviews?`, (results) => {
+  getReviews(restaurant, cb) {
+    $.get(`http://localhost:5001/restaurants/${restaurant}/reviews`, (results) => {
       this.setState({
         data: results,
         totalReviews: results.length,
         initialReviews: results.length,
-      }, () => { if (cb) { cb(); } console.log(this.state.data); });
+        currentRestaurant: restaurant,
+      }, () => { if (cb) { cb(); } console.log(this.state.currentRestaurant); });
     });
   }
 
@@ -66,11 +67,11 @@ class App extends React.Component {
   }
 
   searchReviews(value) {
-    this.getReviews(() => {
+    this.getReviews(1, () => {
       const { data } = this.state
       const searched = [];
       data.forEach((review) => {
-        if (review.body.includes(value)) {
+        if (review.body.toUpperCase().includes(value.toUpperCase())) {
           searched.push(review);
         }
       });
@@ -87,7 +88,11 @@ class App extends React.Component {
     this.setState({
       currentPage: 1,
       totalReviews: this.state.initialReviews,
-    }, this.getReviews);
+    }, () => { 
+      this.getReviews(1, () => {
+        this.sortHandler('Newest First');
+      });
+    });
   }
 
   sortHandler(value) {
@@ -113,14 +118,12 @@ class App extends React.Component {
   }
 
   updateVote(vote, reviewInfo) {
+    console.log(reviewInfo);
+    reviewInfo.restaurantID = this.state.currentRestaurant;
     let voteNum;
-    if (vote === 'useful') {
-      voteNum = reviewInfo.useful_vote
-    } else if (vote === 'cool') {
-      voteNum = reviewInfo.cool_vote
-    } else if (vote === 'funny') {
-      voteNum = reviewInfo.funny_vote
-    }
+    if (vote === 'useful') { voteNum = reviewInfo.useful_vote; }
+    else if (vote === 'cool') { voteNum = reviewInfo.cool_vote; }
+    else if (vote === 'funny') { voteNum = reviewInfo.funny_vote; }
     let dataCopy = this.state.data
     let index;
     dataCopy.forEach((obj, i) => {
@@ -130,24 +133,17 @@ class App extends React.Component {
     });
     let voteType = `${vote}_vote`;
     let voteCount = `${vote}_count`;
-    $.ajax(`http://localhost:5001/reviews/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`, {
+    $.ajax(`http://localhost:5001/restaurants/1/reviews/${reviewInfo._review_id}?value=${voteType}&voted=${voteNum}`, {
       type: 'PATCH',
       data: reviewInfo,
       success: (result) => {
-        console.log(`http://localhost:5001/reviews/${reviewInfo.review_id}?value=${voteType}&voted=${voteNum}`);
         console.log(result, 'look here');
       },
     });
     let reviewCopy = reviewInfo;
-    if (reviewCopy[voteType] === 0) {
-      reviewCopy[voteType] += 1;
-      reviewCopy[voteCount] += 1;
-    } else {
-      reviewCopy[voteType] -= 1;
-      reviewCopy[voteCount] -= 1;
-    }
+    if (reviewCopy[voteType] === 0) { reviewCopy[voteType] += 1; reviewCopy[voteCount] += 1; }
+    else { reviewCopy[voteType] -= 1; reviewCopy[voteCount] -= 1; }
     dataCopy.splice(index, 1, reviewCopy);
-    // console.log(dataCopy)
     this.setState({
       data: dataCopy,
     })
