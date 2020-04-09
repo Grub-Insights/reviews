@@ -31,7 +31,7 @@ const RatingBar = (props) => {
     } else {
       className = 'emptyStarBox';
       starsArray.push(
-        <span className={className}>
+        <span className={className} key={i}>
           <FontAwesomeIcon className="star" icon={faStar} data-test="empty" />
         </span>,
       );

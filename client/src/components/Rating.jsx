@@ -52,7 +52,8 @@ import '../styles/Rating.styles.scss';
           klass += ` is-selected starRater`;
         }
         stars.push(
-          <span 
+          <span
+            key={Math.floor(Math.random() * 10000000)}
             onClick={this.rate.bind(this, i)}
             onMouseOver={this.star_over.bind(this, i)}
             onMouseOut={this.star_out}>

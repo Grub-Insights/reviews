@@ -7,21 +7,12 @@ const VoteButtons = ( {status, updateVote, review} ) => {
   let funnyCount;
   let coolCount;
   let usefulCount;
-  if (review.funny_count === 0) {
-    funnyCount = '';
-  } else {
-    funnyCount = review.funny_count
-  }
-  if (review.cool_count === 0) {
-    coolCount = '';
-  } else {
-    coolCount = review.cool_count
-  }
-  if (review.useful_count === 0) {
-    usefulCount = '';
-  } else {
-    usefulCount = review.useful_count
-  }
+  if (review.funny_count === 0) { funnyCount = ''; }
+  else { funnyCount = review.funny_count; }
+  if (review.cool_count === 0) { coolCount = ''; }
+  else { coolCount = review.cool_count; }
+  if (review.useful_count === 0) { usefulCount = ''; }
+  else { usefulCount = review.useful_count; }
   let buttonArray = [];
   if (review.useful_vote === 0) {
     buttonArray.push(<button type="submit" className="voteBtn clickFX" onClick={() => updateVote('useful')}>
@@ -58,22 +49,7 @@ const VoteButtons = ( {status, updateVote, review} ) => {
   }
 
   return (
-    <span className="btnContainer">
-      {buttonArray}
-      {/* <button type="submit" className="voteBtn" onClick={() => updateVote('useful')}>
-        <FontAwesomeIcon icon={faLightbulb} size="lg" useful-test="useful" />
-        <span btn-test="useful" id="us" className="btnText">{`Useful ${usefulCount}`}</span>
-      </button>
-
-      <button type="submit" className="voteBtn" onClick={() => updateVote('funny')}>
-        <FontAwesomeIcon icon={faGrin} size="lg" funny-test="funny" />
-        <span btn-test="funny" className="btnText">{`Funny ${funnyCount}`}</span>
-      </button>
-      <button type="submit" className="voteBtn" onClick={() => updateVote('cool')}>
-        <FontAwesomeIcon icon={faGrinBeam} size="lg" cool-test="cool" />
-        <span btn-test="cool" className="btnText">{`Cool ${coolCount}`}</span>
-      </button> */}
-    </span>
+    <span className="btnContainer">{buttonArray}</span>
   );
 }
 

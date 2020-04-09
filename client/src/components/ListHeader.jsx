@@ -71,7 +71,7 @@ class ListHeader extends React.Component {
         </button>
         <Sort sortHandler={this.props.sortHandler} />
         <div>
-          <span class="searchResult">{this.props.totalReviews} reviews mentioning "{this.state.query}"  </span>
+          <span className="searchResult">{this.props.totalReviews} reviews mentioning "{this.state.query}"  </span>
           <button className="clearResults">  Clear Results  <button onClick={this.clearSearch} className="closebox"><strong>x</strong></button></button>
         </div>
         <AddRating />

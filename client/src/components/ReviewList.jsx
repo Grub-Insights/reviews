@@ -16,13 +16,13 @@ class ReviewList extends React.Component {
     const reviewArray = dataArray.map((review, i) => {
       if (i === this.props.data.length - 1) {
         return (
-          <div className="reviewItem finalReview">
+          <div className="reviewItem finalReview" key={review._review_id}>
             <Review hover={this.props.hover} updateVote={this.props.updateVote} review={review} />
           </div>
         );
       }
       return (
-        <div className="reviewItem">
+        <div className="reviewItem" key={review._review_id} >
           <Review hover={this.props.hover} updateVote={this.props.updateVote} review={review} />
         </div>
       );

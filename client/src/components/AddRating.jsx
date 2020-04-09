@@ -11,7 +11,7 @@ class AddRating extends React.Component {
 
   render() {
     return (
-      <div class="reviewLink">
+      <div className="reviewLink">
         <span className="iconContainer">
           <FontAwesomeIcon className="astroIcon" icon={faUserAstronaut} size="3x" />
         </span>
