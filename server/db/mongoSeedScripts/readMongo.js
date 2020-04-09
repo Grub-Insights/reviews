@@ -43,8 +43,10 @@ db.once('open', () => { console.log('connected'); })
 getReviews = (req, res, restaurant, sort) => {
   let reviews = [];
   Restaurant.find({_id: 1}, (err, restaurants) => {
-    if (err) return console.error(err);
-    else {
+    if (err) { 
+      res.sendStatus(400);
+      return console.error(err);
+    } else {
       reviews = restaurants[0].reviews;
       res.send(reviews);
     }

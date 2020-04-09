@@ -12,7 +12,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [],
-      sort: 'sort_by=date_desc',
       currentPage: 1,
     };
     this.searchReviews = this.searchReviews.bind(this);
@@ -26,32 +25,26 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getReviews();
+    this.getReviews(() => {
+      this.sortHandler('Newest First');
+    });
   }
 
-  getReviews() {
-    // let start = (this.state.currentPage * 20) - 20
-    $.get(`http://localhost:5001/restaurants/100/reviews?${this.state.sort}`, (results) => {
+  getReviews(cb) {
+    $.get(`http://localhost:5001/restaurants/100/reviews?`, (results) => {
       this.setState({
         data: results,
         totalReviews: results.length,
         initialReviews: results.length,
-      }, () => console.log(this.state.data));
+      }, () => { if (cb) { cb(); } console.log(this.state.data); });
     });
   }
 
   selectNextPage() {
     let nextPage = this.state.currentPage;
     nextPage += 1;
-    // if (nextPage <= Math.ceil(this.state.totalReviews/20))
     this.setState({
       currentPage: nextPage,
-    });
-    const start = nextPage * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
-      this.setState({
-        data: results,
-      });
     });
     this.scrollToTop();
   }
@@ -62,42 +55,28 @@ class App extends React.Component {
     this.setState({
       currentPage: previousPage,
     });
-    const start = previousPage * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
-      this.setState({
-        data: results,
-      });
-    });
     this.scrollToTop();
   }
 
   selectPage(value) {
     this.setState({
       currentPage: value,
-      // start: value * 20 - 20,
-    });
-    const start = value * 20 - 20;
-    $.get(`http://localhost:5001/restaurants/100/reviews?start=${start}&${this.state.sort}`, (results) => {
-      this.setState({
-        data: results,
-      });
     });
     this.scrollToTop();
   }
 
   searchReviews(value) {
-    $.get(`http://localhost:5001/restaurants/100/reviews?${this.state.sort}&q=${value}`, (results) => {
-      this.setState({
-        data: results,
+    this.getReviews(() => {
+      const { data } = this.state
+      const searched = [];
+      data.forEach((review) => {
+        if (review.body.includes(value)) {
+          searched.push(review);
+        }
       });
-    });
-    $.get(`http://localhost:5001/restaurants/100/numberofreviews?q=${value}`, (results) => {
-      let total = Number(results);
-      if (isNaN(total)) {
-        total = Number(results[0]);
-      }
       this.setState({
-        totalReviews: total,
+        data: searched,
+        totalReviews: searched.length,
         currentPage: 1,
       });
     });
@@ -108,7 +87,6 @@ class App extends React.Component {
     this.setState({
       currentPage: 1,
       totalReviews: this.state.initialReviews,
-      // sort: 'sort_by=date_desc',
     }, this.getReviews);
   }
 
@@ -131,6 +109,7 @@ class App extends React.Component {
       });
       this.setState({ data: sorted });
     }
+    this.setState({ currentPage: 1 });
   }
 
   updateVote(vote, reviewInfo) {
@@ -184,10 +163,11 @@ class App extends React.Component {
     console.log('HEY FROM APP')
   }
   render() {
+    const pageData = this.state.data.slice((this.state.currentPage * 20) - 20,  this.state.currentPage * 20)
     return (
       <div className="application">
         <ListHeader reset={this.resetSearch} sortHandler={this.sortHandler} searchHandle={this.searchReviews} totalReviews={this.state.totalReviews}/>
-        <ReviewList hover={this.reviewHover} updateVote={this.updateVote} data={this.state.data} />
+        <ReviewList hover={this.reviewHover} updateVote={this.updateVote} data={pageData} />
         <Pagination select={this.selectPage} previous={this.selectPreviousPage} totalReviews={this.state.totalReviews} next={this.selectNextPage} info={this.state} />
       </div>
     );

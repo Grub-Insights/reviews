@@ -20,7 +20,7 @@ app.get('/restaurants/:restaurantId/reviews', (req, res) => {
   mongo.getReviews(req, res, restaurant, sort);
 });
 
-app.get('/restaurants/:restaurantId/numberofreviews', (req, res) => {
+// app.get('/restaurants/:restaurantId/numberofreviews', (req, res) => {
   // let query;
   // if (req.query.q) {
   //   query = req.query.q;
@@ -42,7 +42,7 @@ app.get('/restaurants/:restaurantId/numberofreviews', (req, res) => {
   //     }
   //   });
   // }
-});
+// });
 
 app.patch('/reviews/:reviewId', (req, res) => {
 // http://localhost:5000/reviewId/9676?value=cool_count&voted=true

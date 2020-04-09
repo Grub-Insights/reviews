@@ -17,7 +17,7 @@ class ReviewList extends React.Component {
       if (i === this.props.data.length - 1) {
         return (
           <div className="reviewItem finalReview">
-            <Review hover={this.props.hover}updateVote={this.props.updateVote} review={review} />
+            <Review hover={this.props.hover} updateVote={this.props.updateVote} review={review} />
           </div>
         );
       }
