@@ -31,7 +31,7 @@ const restaurantSchema = new mongoose.Schema({
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
-mongoose.connect('mongodb://localhost/squawk', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/squawk', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -44,7 +44,7 @@ getReviews = (res, restaurant) => {
   Restaurant.find({_restaurant_id: restaurant}, (err, restaurants) => {
     if (err) { res.sendStatus(400); return console.error(err); } 
     else { res.send(restaurants[0].reviews); }
-  });
+  }).hint({ _restaurant_id: 1}).lean();
 }
 
 updateVoteCount = (res, voteInfo) => {
