@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const fake = require('faker');
 
 const restaurantSchema = new mongoose.Schema({
-  // restaurant_id: { type: Number, unique: true },
   _restaurant_id: { type: Number, unique: true },
   name: String,
   reviews: [{
-    _review_id: { type: Number, unique: true },
+    _review_id: Number,
+    // _review_id: { type: Number, unique: true },
     date: Date,
     rating: Number,
     body: String,
@@ -18,7 +18,7 @@ const restaurantSchema = new mongoose.Schema({
     cool_vote: { type: Number, default: 0 },
     funny_vote: { type: Number, default: 0 },
     user: {
-      _user_id: { type: Number, unique: true },
+      _user_id: Number,
       name: String,
       profile_pic: String,
       reviews: Number,
@@ -31,13 +31,14 @@ const restaurantSchema = new mongoose.Schema({
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
-mongoose.connect('mongodb://localhost/squawk', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect('mongodb://18.188.17.47:27017/squawk', { useNewUrlParser: true, useUnifiedTopology: true } );
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => { console.log('connected'); })
   .then(() => {
     console.log('connected');
+    // Restaurant.getPlanCache().clear()
   });
 
 getReviews = (res, restaurant) => {

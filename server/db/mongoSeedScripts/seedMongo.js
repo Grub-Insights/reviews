@@ -2,7 +2,6 @@ const fake = require('faker');
 const fs = require('fs');
 const { profileImg } = require('../profileImages');
 
-
 const writeRestaurantsAndReviews = fs.createWriteStream('server/db/seededResults/rANDrData.json');
 function writeTenMillionRandR(writer, encoding, callback) {
   let i = 1000000;

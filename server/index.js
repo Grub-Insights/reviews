@@ -13,14 +13,14 @@ if (cluster.isMaster) {
   require('newrelic');
   const express = require('express');
   const path = require('path');
-  const cors = require('cors');
+  // const cors = require('cors');
   const bodyParser = require('body-parser');
 
   const app = express();
   const mongo = require('./db/mongoSeedScripts/readMongo');
 
   const port = 5001;
-  app.use(cors());
+  // app.use(cors());
   app.use(express.static(path.join(__dirname, '../client/public/')));
 
   app.get('/restaurants/:restaurantId/reviews', (req, res) => {

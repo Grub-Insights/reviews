@@ -31,7 +31,7 @@ class App extends React.Component {
   }
 
   getReviews(restaurant, cb) {
-    $.get(`http://localhost:5001/restaurants/${restaurant}/reviews`, (results) => {
+    $.get(`http://18.222.170.135:5001//restaurants/${restaurant}/reviews`, (results) => {
       this.setState({
         data: results,
         totalReviews: results.length,
@@ -132,7 +132,7 @@ class App extends React.Component {
     });
     let voteType = `${vote}_vote`;
     let voteCount = `${vote}_count`;
-    $.ajax(`http://localhost:5001/restaurants/${this.state.currentRestaurant}/reviews/${reviewInfo._review_id}?value=${voteType}&voted=${voteNum}`, {
+    $.ajax(`http://18.217.222.91:5001//restaurants/${this.state.currentRestaurant}/reviews/${reviewInfo._review_id}?value=${voteType}&voted=${voteNum}`, {
       type: 'PATCH',
       data: reviewInfo,
       success: (result) => {
