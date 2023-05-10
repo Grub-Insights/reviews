@@ -32,7 +32,7 @@
     "font-awesome": "^4.7.0",
     "http": "0.0.1-security",
     "jquery": "^3.4.1",
-    "mongoose": "^5.9.7",
+    "mongoose": "^5.13.15",
     "mysql": "^2.18.1",
     "newrelic": "^6.5.0",
     "nodemon": "^2.0.2",
